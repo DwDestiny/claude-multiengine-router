@@ -39,3 +39,4 @@ logs/
 # README assets are release content, not generated runtime output.
 !assets/
 !assets/*.png
+!assets/*.svg

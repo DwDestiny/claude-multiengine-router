@@ -16,6 +16,7 @@
 - `mcp-servers/grok-mcp/`: Python stdio MCP server for official Grok Build.
 - `tests/`: non-destructive installer smoke tests.
 - `.github/`: CI workflow and issue/PR templates.
+- `assets/`: README visual assets, currently SVG diagrams for routing architecture and engine roles.
 - `docs/`: roadmap and maintenance notes.
 - `CONTRIBUTING.md`: contributor checks, style, and PR flow.
 

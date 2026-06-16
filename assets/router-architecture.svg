@@ -1,0 +1,111 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Claude Multiengine Router architecture</title>
+  <desc id="desc">A product architecture diagram showing Claude Code as the commander, the agent-router skill as the routing layer, MCP tools and proxy agents as execution lanes, and Codex plus Grok Build as the engine pool returning reviewed work.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#08111f"/>
+      <stop offset="0.52" stop-color="#10263a"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="commander" x1="145" y1="170" x2="405" y2="410" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ffe08a"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="codex" x1="800" y1="160" x2="1065" y2="275" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#34d399"/>
+      <stop offset="1" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="grok" x1="800" y1="330" x2="1065" y2="445" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#a78bfa"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#000000" flood-opacity="0.25"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2 2L10 6L2 10" stroke="#9fb8d0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrowGold" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2 2L10 6L2 10" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      .font { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .label { fill: #dce8f5; font-size: 22px; font-weight: 700; }
+      .small { fill: #a9bfd5; font-size: 16px; font-weight: 500; }
+      .tiny { fill: #b7c7d8; font-size: 13px; font-weight: 600; }
+      .chip { fill: rgba(255,255,255,0.08); stroke: rgba(255,255,255,0.15); stroke-width: 1; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <g opacity="0.16">
+    <path d="M0 96H1200M0 192H1200M0 288H1200M0 384H1200M0 480H1200" stroke="#8fb3d9"/>
+    <path d="M120 0V630M240 0V630M360 0V630M480 0V630M600 0V630M720 0V630M840 0V630M960 0V630M1080 0V630" stroke="#8fb3d9"/>
+  </g>
+
+  <text x="70" y="72" class="font" fill="#ffffff" font-size="40" font-weight="800">Claude Multiengine Router</text>
+  <text x="72" y="106" class="font small">One Claude Code session. Two execution lanes. Three engines, one final review gate.</text>
+
+  <g filter="url(#softShadow)">
+    <rect x="70" y="168" width="245" height="244" rx="24" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.16)"/>
+    <circle cx="192" cy="250" r="58" fill="url(#commander)"/>
+    <path d="M168 260L192 216L216 260H201V296H183V260H168Z" fill="#111827"/>
+    <text x="114" y="336" class="font label">Claude Code</text>
+    <text x="115" y="365" class="font small">commander</text>
+    <rect x="94" y="382" width="196" height="34" rx="17" class="chip"/>
+    <text x="124" y="404" class="font tiny">plan · route · review</text>
+  </g>
+
+  <g filter="url(#softShadow)">
+    <rect x="392" y="190" width="270" height="210" rx="24" fill="rgba(9,16,30,0.82)" stroke="#fbbf24" stroke-opacity="0.58"/>
+    <text x="429" y="236" class="font label">agent-router skill</text>
+    <text x="430" y="268" class="font small">installed into Claude Code</text>
+    <rect x="422" y="300" width="210" height="38" rx="19" class="chip"/>
+    <text x="449" y="324" class="font tiny">capability map</text>
+    <rect x="422" y="350" width="210" height="38" rx="19" class="chip"/>
+    <text x="446" y="374" class="font tiny">routing rules</text>
+  </g>
+
+  <path d="M315 294C344 294 361 294 392 294" stroke="#fbbf24" stroke-width="3" marker-end="url(#arrowGold)"/>
+
+  <g filter="url(#softShadow)">
+    <rect x="725" y="144" width="340" height="150" rx="22" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.14)"/>
+    <text x="759" y="185" class="font label">MCP tool lane</text>
+    <text x="759" y="215" class="font small">native calls, low ceremony</text>
+    <rect x="759" y="238" width="124" height="34" rx="17" fill="url(#codex)" opacity="0.88"/>
+    <text x="782" y="260" class="font tiny" fill="#07111f">codex MCP</text>
+    <rect x="901" y="238" width="124" height="34" rx="17" fill="url(#grok)" opacity="0.88"/>
+    <text x="923" y="260" class="font tiny" fill="#07111f">grok MCP</text>
+  </g>
+
+  <g filter="url(#softShadow)">
+    <rect x="725" y="334" width="340" height="155" rx="22" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.14)"/>
+    <text x="759" y="375" class="font label">Proxy agent lane</text>
+    <text x="759" y="405" class="font small">parallel, isolated contexts</text>
+    <rect x="759" y="428" width="88" height="32" rx="16" class="chip"/>
+    <text x="779" y="449" class="font tiny">exec</text>
+    <rect x="858" y="428" width="88" height="32" rx="16" class="chip"/>
+    <text x="877" y="449" class="font tiny">fast</text>
+    <rect x="957" y="428" width="88" height="32" rx="16" class="chip"/>
+    <text x="974" y="449" class="font tiny">review</text>
+  </g>
+
+  <path d="M662 246C690 214 700 204 725 204" stroke="#9fb8d0" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M662 344C690 380 700 411 725 411" stroke="#9fb8d0" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g filter="url(#softShadow)">
+    <rect x="390" y="468" width="675" height="82" rx="22" fill="rgba(255,255,255,0.09)" stroke="rgba(255,255,255,0.16)"/>
+    <text x="429" y="505" class="font label">diffs · research briefs · generated assets</text>
+    <text x="430" y="532" class="font small">returned to Claude for synthesis, safety checks, and final acceptance</text>
+  </g>
+
+  <path d="M895 294C895 313 895 315 895 334" stroke="#9fb8d0" stroke-width="3"/>
+  <path d="M895 489C895 530 872 540 824 550" stroke="#9fb8d0" stroke-width="3" marker-end="url(#arrow)"/>
+  <path d="M390 509C330 509 262 480 228 412" stroke="#fbbf24" stroke-width="3" marker-end="url(#arrowGold)"/>
+
+  <g>
+    <rect x="70" y="500" width="250" height="56" rx="18" fill="rgba(251,191,36,0.12)" stroke="rgba(251,191,36,0.34)"/>
+    <text x="99" y="523" class="font tiny" fill="#fde68a">Final gate stays with Claude</text>
+    <text x="99" y="544" class="font tiny">delegate execution, not judgment</text>
+  </g>
+</svg>

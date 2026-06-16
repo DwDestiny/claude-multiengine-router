@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/hero-hive.png" alt="Claude Multiengine Router" width="640">
+  <img src="assets/router-architecture.svg" alt="Claude Multiengine Router architecture" width="760">
 </p>
 
 <h1 align="center">Claude Multiengine Router</h1>
@@ -7,13 +7,13 @@
 <p align="center"><strong>指挥，而非哄劝。&nbsp;·&nbsp;Command. Don't coax.</strong></p>
 
 <p align="center">
-Claude is the commander. Through dynamic workflows it fans out a mixed elite team of <b>Codex (GPT-5.5)</b> and <b>official Grok Build</b> — every task routed to the engine that does it best.
+Claude stays the commander. This installer adds a routing skill, proxy agents, and MCP servers so Claude Code can send each task to <b>Codex (GPT-5.5)</b> or <b>official Grok Build</b> without giving up final review.
 </p>
 
 <p align="center">
   <a href="#-quick-start">Quick Start</a> ·
-  <a href="#-how-it-works">How It Works</a> ·
-  <a href="#-engines">Engines</a> ·
+  <a href="#how-it-works">How It Works</a> ·
+  <a href="#engines">Engines</a> ·
   <a href="#%EF%B8%8F-safety">Safety</a> ·
   <a href="#中文说明">中文</a>
 </p>
@@ -36,33 +36,45 @@ So this project plugs **Codex (GPT-5.5)** and **official Grok Build** into that 
 - **Leverage each engine's strength** — Codex for code, Grok for research & real-time X signals, Claude for orchestration.
 - **Pool your separate subscriptions** into one mixed team, each playing to its strength.
 
-> Claude commands; Codex and Grok are the elite worker bees.
+> Delegate execution, not judgment: Claude still plans, routes, reviews, and accepts the final result.
 
-## 🐝 How It Works
+## How It Works
 
 ```mermaid
-flowchart TD
-    U([You]) --> C{{Claude · Commander}}
-    C -->|plan · route · review · accept| C
-    C -->|fan-out parallel workers| W[Dynamic Workflow]
-    W -->|code · tests · refactor · images| CX[Codex · GPT-5.5]
-    W -->|research · X/web · best-of-n| GK[Grok Build]
-    CX --> R[[Synthesized result]]
+flowchart LR
+    U([You ask Claude Code]) --> C{Claude plans<br/>and chooses a route}
+
+    C --> S[agent-router skill<br/>capability map + routing rules]
+    S --> M[MCP tool lane<br/>native low-ceremony calls]
+    S --> A[Proxy agent lane<br/>parallel isolated workers]
+
+    M --> CM[Codex MCP server]
+    M --> GM[Grok MCP server]
+    A --> CA[codex-exec · codex-fast<br/>codex-image · codex-review]
+    A --> GA[grok-research · grok-coder]
+
+    CM --> CX[Codex<br/>code · tests · images · review]
+    CA --> CX
+    GM --> GK[Grok Build<br/>web/X research · best-of-n code]
+    GA --> GK
+
+    CX --> R[diffs · research briefs · generated assets]
     GK --> R
-    R --> C
+    R --> F{Claude reviews<br/>and accepts}
+    F --> O([Final answer or patch])
 ```
 
-Claude stays the **commander** — planning, routing, concurrency, review, final acceptance. Codex and Grok are exposed **two ways**, which compose:
+Claude stays the **commander** — planning, routing, concurrency, review, final acceptance. The repository installs the execution surface Claude needs:
 
 - **MCP tools** — `mcp__codex__codex`, `mcp__grok__grok_research`, `mcp__grok__grok_code` (mechanism-level, called natively).
 - **Proxy subagents** — fanned out in parallel inside a dynamic workflow (`--ephemeral`, so many Codex runs never collide).
 
 The routing decision ("who does this task best?") stays Claude's judgment; capability metadata lives in each tool's description, not in a global prompt.
 
-## 🧩 Engines
+## Engines
 
 <p align="center">
-  <img src="assets/engines-trio.png" alt="Claude · Codex · Grok" width="720">
+  <img src="assets/engine-roles.svg" alt="Claude, Codex, and Grok Build roles" width="760">
 </p>
 
 | Engine | Role | Strengths |
@@ -215,7 +227,7 @@ Claude 真正的超能力不是写一个文件，而是**整合任务、并发�
 - **发挥各家专长** —— 写码用 Codex，调研和 X 实时信号用 Grok，编排调度用 Claude；
 - **把分散的多家订阅池化**成一支混编精英团队，各展所长。
 
-> Claude 指挥，Codex 和 Grok 是精英工蜂。
+> 下放执行，不下放判断：Claude 仍负责规划、路由、审查和最终验收。
 
 ### 核心分工
 

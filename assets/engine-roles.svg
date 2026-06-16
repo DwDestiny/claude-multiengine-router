@@ -1,0 +1,89 @@
+<svg width="1200" height="520" viewBox="0 0 1200 520" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Engine roles in Claude Multiengine Router</title>
+  <desc id="desc">Three role cards show Claude as commander, Codex as builder, and Grok Build as scout. A bottom strip explains the practical value: pool subscriptions, route by strength, and keep one final review gate.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="520" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f8fafc"/>
+      <stop offset="1" stop-color="#e7edf5"/>
+    </linearGradient>
+    <linearGradient id="claude" x1="110" y1="120" x2="330" y2="330" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fef3c7"/>
+      <stop offset="1" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="codex" x1="490" y1="120" x2="710" y2="330" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#dcfce7"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="grok" x1="870" y1="120" x2="1090" y2="330" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#f3e8ff"/>
+      <stop offset="1" stop-color="#0891b2"/>
+    </linearGradient>
+    <filter id="shadow" x="-15%" y="-15%" width="130%" height="135%" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="14" stdDeviation="16" flood-color="#475569" flood-opacity="0.20"/>
+    </filter>
+    <style>
+      .font { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .h1 { fill: #0f172a; font-size: 38px; font-weight: 850; }
+      .sub { fill: #475569; font-size: 18px; font-weight: 550; }
+      .role { fill: #0f172a; font-size: 30px; font-weight: 850; }
+      .tag { fill: #475569; font-size: 17px; font-weight: 650; }
+      .item { fill: #334155; font-size: 16px; font-weight: 560; }
+      .mono { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; fill: #f8fafc; font-size: 14px; font-weight: 700; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="520" fill="url(#bg)"/>
+  <g opacity="0.35">
+    <circle cx="1080" cy="84" r="120" fill="#bfdbfe"/>
+    <circle cx="86" cy="464" r="130" fill="#fde68a"/>
+  </g>
+
+  <text x="72" y="68" class="font h1">One commander. Two worker engines.</text>
+  <text x="74" y="102" class="font sub">Pool subscriptions, route by strength, and keep Claude as the final review gate.</text>
+
+  <g filter="url(#shadow)">
+    <rect x="70" y="138" width="310" height="245" rx="24" fill="#ffffff" stroke="#e2e8f0"/>
+    <circle cx="127" cy="198" r="34" fill="url(#claude)"/>
+    <path d="M112 205L127 176L142 205H132V225H122V205H112Z" fill="#1e293b"/>
+    <text x="178" y="191" class="font role">Claude</text>
+    <text x="180" y="219" class="font tag">Commander</text>
+    <path d="M101 260H348" stroke="#e2e8f0"/>
+    <text x="104" y="293" class="font item">Plans the work and splits tasks</text>
+    <text x="104" y="323" class="font item">Chooses the lane and worker</text>
+    <text x="104" y="353" class="font item">Reviews, merges, and accepts</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="445" y="138" width="310" height="245" rx="24" fill="#ffffff" stroke="#e2e8f0"/>
+    <circle cx="502" cy="198" r="34" fill="url(#codex)"/>
+    <path d="M485 198L498 185L506 193L493 206L506 219L498 227L485 214L471 227L463 219L477 205L463 191L471 183L485 198Z" fill="#f8fafc"/>
+    <text x="553" y="191" class="font role">Codex</text>
+    <text x="555" y="219" class="font tag">Builder</text>
+    <path d="M476 260H723" stroke="#e2e8f0"/>
+    <text x="479" y="293" class="font item">Code and test repair</text>
+    <text x="479" y="323" class="font item">Image and review tasks</text>
+    <text x="479" y="353" class="font item">Ephemeral parallel runs</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="820" y="138" width="310" height="245" rx="24" fill="#ffffff" stroke="#e2e8f0"/>
+    <circle cx="877" cy="198" r="34" fill="url(#grok)"/>
+    <path d="M860 202C871 184 888 184 899 202C888 220 871 220 860 202Z" stroke="#f8fafc" stroke-width="5" stroke-linejoin="round"/>
+    <circle cx="880" cy="202" r="6" fill="#f8fafc"/>
+    <text x="928" y="191" class="font role">Grok Build</text>
+    <text x="930" y="219" class="font tag">Scout</text>
+    <path d="M851 260H1098" stroke="#e2e8f0"/>
+    <text x="854" y="293" class="font item">Web and X research</text>
+    <text x="854" y="323" class="font item">Best-of-n comparison</text>
+    <text x="854" y="353" class="font item">Independent second opinion</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="70" y="420" width="1060" height="68" rx="24" fill="#0f172a"/>
+    <text x="180" y="462" class="font mono">pool subscriptions</text>
+    <circle cx="435" cy="454" r="5" fill="#94a3b8"/>
+    <text x="505" y="462" class="font mono">route by strength</text>
+    <circle cx="750" cy="454" r="5" fill="#94a3b8"/>
+    <text x="820" y="462" class="font mono">one final review gate</text>
+  </g>
+</svg>
