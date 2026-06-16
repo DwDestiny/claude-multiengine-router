@@ -106,7 +106,7 @@ grok login
 **macOS / Linux:**
 
 ```bash
-git clone https://github.com/<you>/claude-multiengine-router.git
+git clone https://github.com/DwDestiny/claude-multiengine-router.git
 cd claude-multiengine-router
 bash install.sh
 ```
@@ -114,7 +114,7 @@ bash install.sh
 **Windows PowerShell:**
 
 ```powershell
-git clone https://github.com/<you>/claude-multiengine-router.git
+git clone https://github.com/DwDestiny/claude-multiengine-router.git
 cd claude-multiengine-router
 .\install.ps1
 ```
@@ -188,14 +188,19 @@ Same-name installed files are backed up under `~/.claude/backups/claude-multieng
 ## Development Checks
 
 ```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python3 -m pip install -r mcp-servers/grok-mcp/requirements.txt
 bash -n install.sh uninstall.sh tests/test_install_temp_home.sh tests/test_uninstall_temp_home.sh
 bash tests/test_install_temp_home.sh
 bash tests/test_uninstall_temp_home.sh
 python3 tests/test_python_installer.py
 python3 -m unittest discover -s mcp-servers/grok-mcp -p 'test_*.py'
+python3 tests/ci_install_dry_run.py
+python3 tests/private_leak_gate.py .
 ```
 
-The temp-HOME smoke tests use fake `claude`/`codex`/`grok` binaries — they never touch your real `~/.claude`.
+The temp-HOME smoke tests use fake `claude`/`codex`/`grok` binaries — they never touch your real `~/.claude`. GitHub Actions runs the same release-readiness checks on Ubuntu, macOS, and Windows.
 
 ## License
 
@@ -240,7 +245,7 @@ grok login
 安装（macOS/Linux 用 `bash install.sh`，Windows 用 `.\install.ps1` 或 `python .\install.py`）：
 
 ```bash
-git clone https://github.com/<you>/claude-multiengine-router.git
+git clone https://github.com/DwDestiny/claude-multiengine-router.git
 cd claude-multiengine-router
 bash install.sh
 ```

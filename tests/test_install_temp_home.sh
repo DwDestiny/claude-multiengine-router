@@ -126,10 +126,10 @@ grep -q "$FAKE_BIN_REAL/grok" "$TEST_HOME/.claude/agents/grok-coder.md"
 grep -q "$TEST_HOME_REAL/router-output/images" "$TEST_HOME/.claude/agents/codex-image.md"
 grep -q "ENABLE_WIKI_LOG=false" "$TEST_HOME/.claude/agent-router/config.sh"
 
-if rg -n "/Users/dw|Desktop/claude|老党|~/wiki|~/.claude/CLAUDE.md" "$TEST_HOME/.claude/skills/agent-router" "$TEST_HOME/.claude/agents" "$TEST_HOME/.claude/mcp-servers/grok-mcp"; then
-  echo "found private local references after install" >&2
-  exit 1
-fi
+python3 "$ROOT/tests/private_leak_gate.py" \
+  "$TEST_HOME/.claude/skills/agent-router" \
+  "$TEST_HOME/.claude/agents" \
+  "$TEST_HOME/.claude/mcp-servers/grok-mcp"
 
 if rg -n "__CODEX_BIN__|__GROK_BIN__|__OUTPUT_DIR__|__GROK_MODEL__|__CODEX_MODEL_FLAG__|__CODEX_MODEL_LABEL__" "$TEST_HOME/.claude/skills/agent-router" "$TEST_HOME/.claude/agents"; then
   echo "found unreplaced template placeholders after install" >&2

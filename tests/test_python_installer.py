@@ -34,8 +34,22 @@ uninstall = load_module("cmr_uninstall", ROOT / "uninstall.py")
 
 
 def write_executable(path: Path, body: str) -> None:
-    path.write_text(body, encoding="utf-8", newline="\n")
-    path.chmod(path.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+    newline = "\r\n" if path.suffix.lower() == ".cmd" else "\n"
+    path.write_text(body, encoding="utf-8", newline=newline)
+    if os.name != "nt":
+        path.chmod(path.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+
+
+def fake_cli_path(fake_bin: Path, name: str) -> Path:
+    if os.name == "nt":
+        return fake_bin / f"{name}.cmd"
+    return fake_bin / name
+
+
+def write_fake_cli(fake_bin: Path, name: str, unix_body: str, windows_body: str) -> Path:
+    path = fake_cli_path(fake_bin, name)
+    write_executable(path, windows_body if os.name == "nt" else unix_body)
+    return path
 
 
 class PythonInstallerUnitTest(unittest.TestCase):
@@ -91,8 +105,9 @@ class PythonInstallerSmokeTest(unittest.TestCase):
             fake_bin.mkdir()
             test_home.mkdir()
 
-            write_executable(
-                fake_bin / "claude",
+            write_fake_cli(
+                fake_bin,
+                "claude",
                 """#!/usr/bin/env bash
 set -euo pipefail
 case "${1:-}" in
@@ -107,9 +122,22 @@ case "${1:-}" in
   *) exit 2 ;;
 esac
 """,
+                """@echo off
+if "%1"=="mcp" (
+  if "%2"=="add" exit /b 0
+  if "%2"=="list" (
+    echo codex: Connected
+    echo grok: Connected
+    exit /b 0
+  )
+  if "%2"=="remove" exit /b 0
+)
+exit /b 2
+""",
             )
-            write_executable(
-                fake_bin / "codex",
+            codex_path = write_fake_cli(
+                fake_bin,
+                "codex",
                 """#!/usr/bin/env bash
 set -euo pipefail
 case "${1:-}" in
@@ -118,15 +146,36 @@ case "${1:-}" in
   *) exit 2 ;;
 esac
 """,
+                """@echo off
+if "%1"=="login" (
+  if "%2"=="status" (
+    echo Logged in
+    exit /b 0
+  )
+)
+if "%1"=="mcp-server" (
+  echo codex mcp server
+  exit /b 0
+)
+exit /b 2
+""",
             )
-            write_executable(
-                fake_bin / "grok",
+            grok_path = write_fake_cli(
+                fake_bin,
+                "grok",
                 """#!/usr/bin/env bash
 set -euo pipefail
 case "${1:-}" in
   models) printf 'grok-build\\n' ;;
   *) exit 2 ;;
 esac
+""",
+                """@echo off
+if "%1"=="models" (
+  echo grok-build
+  exit /b 0
+)
+exit /b 2
 """,
             )
 
@@ -145,6 +194,8 @@ esac
                     "GROK_MODEL": "grok-build",
                 }
             )
+            if os.name == "nt":
+                env["PATHEXT"] = f".COM;.EXE;.BAT;.CMD;{env.get('PATHEXT', '')}"
 
             subprocess.run([sys.executable, str(ROOT / "install.py")], cwd=ROOT, env=env, check=True)
 
@@ -154,7 +205,8 @@ esac
             self.assertTrue((claude_home / "mcp-servers/grok-mcp/server.py").is_file())
             self.assertTrue((claude_home / "agent-router/config.sh").is_file())
             self.assertTrue((claude_home / "agent-router/config.ps1").is_file())
-            self.assertIn(str(fake_bin / "codex"), (claude_home / "agents/codex-exec.md").read_text(encoding="utf-8"))
+            self.assertIn(str(codex_path), (claude_home / "agents/codex-exec.md").read_text(encoding="utf-8"))
+            self.assertIn(str(grok_path), (claude_home / "agents/grok-coder.md").read_text(encoding="utf-8"))
             self.assertIn(str(test_home / "router-output/images"), (claude_home / "agents/codex-image.md").read_text(encoding="utf-8"))
 
     def test_dry_run_json_does_not_create_claude_home(self) -> None:
@@ -165,7 +217,7 @@ esac
             fake_bin.mkdir()
             test_home.mkdir()
             for name in ("claude", "codex", "grok"):
-                write_executable(fake_bin / name, "#!/usr/bin/env bash\necho fake\n")
+                write_fake_cli(fake_bin, name, "#!/usr/bin/env bash\necho fake\n", "@echo off\necho fake\n")
 
             env = os.environ.copy()
             env.update(
@@ -176,6 +228,8 @@ esac
                     "AGENT_ROUTER_SKIP_AUTH_CHECK": "1",
                 }
             )
+            if os.name == "nt":
+                env["PATHEXT"] = f".COM;.EXE;.BAT;.CMD;{env.get('PATHEXT', '')}"
 
             completed = subprocess.run(
                 [sys.executable, str(ROOT / "install.py"), "--dry-run", "--json"],

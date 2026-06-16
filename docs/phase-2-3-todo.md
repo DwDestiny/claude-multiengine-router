@@ -14,11 +14,18 @@ Remaining Windows work is now Phase 3 CI / true-machine verification.
 
 ## Phase 3: CI and Release
 
-- Add CI for `bash -n`, shell smoke tests, and Python unit tests.
-- Add GitHub Actions Windows smoke tests with fake `.cmd` CLIs.
-- Add PowerShell syntax checks once `pwsh` is available in CI.
-- Add shell linting once script behavior stabilizes.
-- Add release packaging checks for missing placeholders and private path leaks.
-- Add integration-test documentation for real `claude mcp add` runs on a disposable Claude profile.
+Implemented in Phase 3 release prep:
+
+- Added GitHub Actions CI for Ubuntu, macOS, and Windows.
+- Added Unix shell syntax checks and Windows PowerShell parser checks.
+- Added Python installer tests, Grok MCP unittest, fake-CLI install dry-run, and private-leak gate.
+- Added contribution guide, `.gitignore` release hygiene, and GitHub issue/PR templates.
+
+Still deferred to release owner:
+
+- Record the README demo GIF.
+- Create and push the real GitHub repository.
+- Replace README `<you>` placeholders with the real owner/repo.
+- Run a true integration test for real `claude mcp add` on a disposable Claude profile.
 - Add versioned changelog and release tags.
-- Decide whether to publish a Homebrew tap or a one-line remote installer.
+- Decide later whether to publish a Homebrew tap or one-line remote installer.

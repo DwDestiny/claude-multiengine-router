@@ -15,7 +15,9 @@
 - `agents/`: Claude proxy agent templates.
 - `mcp-servers/grok-mcp/`: Python stdio MCP server for official Grok Build.
 - `tests/`: non-destructive installer smoke tests.
+- `.github/`: CI workflow and issue/PR templates.
 - `docs/`: roadmap and maintenance notes.
+- `CONTRIBUTING.md`: contributor checks, style, and PR flow.
 
 ## Commands
 
@@ -25,6 +27,9 @@ bash tests/test_install_temp_home.sh
 bash tests/test_uninstall_temp_home.sh
 python3 tests/test_python_installer.py
 python3 -m unittest discover -s mcp-servers/grok-mcp -p 'test_*.py'
+python3 tests/ci_install_dry_run.py
+python3 tests/private_leak_gate.py .
+python3 -c 'import yaml, pathlib; yaml.safe_load(pathlib.Path(".github/workflows/ci.yml").read_text())'
 ```
 
 ## Safety Rules

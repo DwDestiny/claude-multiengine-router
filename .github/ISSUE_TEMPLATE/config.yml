@@ -1,0 +1,4 @@
+# Input: GitHub issue creation UI. Output: issue template behavior.
+# Pos: keeps blank issues available while specific templates stay lightweight.
+
+blank_issues_enabled: true

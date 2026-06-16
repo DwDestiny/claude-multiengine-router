@@ -1,13 +1,41 @@
 # Input: local development/runtime artifacts. Output: ignored files for git.
 # Pos: keep user config, virtualenvs, caches, and local backups out of the open-source repo.
 
+# Local configuration and secrets
 config.local.sh
+.env
+.env.*
+*.local.*
+
+# OS/editor noise
 .DS_Store
+.idea/
+.vscode/
+
+# Python caches and environments
 __pycache__/
-*.pyc
+*.py[cod]
 .pytest_cache/
+.mypy_cache/
 .venv/
-*.bak.*
-tmp/
-dist/
+
+# Build and packaging output
 build/
+dist/
+*.egg-info/
+
+# Runtime output, generated backups, and local tool state
+backups/
+*.bak.*
+*.backup/
+.agent-router/
+.claude/
+.serena/
+tmp/
+temp/
+logs/
+*.log
+
+# README assets are release content, not generated runtime output.
+!assets/
+!assets/*.png
