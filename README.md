@@ -38,11 +38,6 @@ So this project plugs **Codex (GPT-5.5)** and **official Grok Build** into that 
 
 > Claude commands; Codex and Grok are the elite worker bees.
 
-## 🎬 Demo
-
-<!-- TODO: 15–30s terminal GIF (<5MB) — Claude receives a task, fans out a dynamic workflow, Codex + Grok workers run in parallel, results synthesized. -->
-<p align="center"><em>(demo recording coming soon — drop a terminal GIF here, &lt;5MB)</em></p>
-
 ## 🐝 How It Works
 
 ```mermaid
