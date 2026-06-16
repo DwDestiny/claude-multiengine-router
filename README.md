@@ -2,7 +2,7 @@
 
 Claude Code as the controller. Codex and official Grok Build as delegated execution engines.
 
-This project installs a Phase 1 macOS/Linux MVP for a local multi-engine agent setup:
+This project installs a portable local multi-engine agent setup for macOS, Linux, and Windows:
 
 - Claude Code stays responsible for planning, routing, review, and final acceptance.
 - Codex handles primary coding, refactoring, debugging, tests, review, and image-generation prompts.
@@ -29,7 +29,9 @@ This project installs a Phase 1 macOS/Linux MVP for a local multi-engine agent s
 │   ├── selftest_stdio.py
 │   ├── requirements.txt
 │   └── .venv/
-└── agent-router/config.sh
+└── agent-router/
+    ├── config.sh
+    └── config.ps1
 ```
 
 The installer also runs:
@@ -39,11 +41,18 @@ claude mcp add -s user codex -- <codex> mcp-server
 claude mcp add -s user grok -- <venv-python> <server.py>
 ```
 
+On Windows, the same registration is executed through Python argument lists, using the Windows venv interpreter:
+
+```powershell
+claude mcp add -s user codex -- <codex> mcp-server
+claude mcp add -s user grok -e GROK_BIN=<grok> -e GROK_MODEL=grok-build -- <mcp>\.venv\Scripts\python.exe <mcp>\server.py
+```
+
 Existing same-name skills, agents, and Grok MCP files are backed up before replacement unless they were already installed by this project.
 
 ## Prerequisites
 
-Phase 1 supports macOS and Linux. Windows native support is planned for Phase 2; use WSL for now.
+Phase 2 supports macOS, Linux, and Windows. The install logic lives in `install.py`; `install.sh` and `install.ps1` are thin wrappers.
 
 Install and authenticate these first:
 
@@ -63,10 +72,33 @@ The installer checks `codex login status` and `grok models`. It never logs in fo
 
 ## One-Command Install
 
+macOS/Linux:
+
 ```bash
 git clone https://github.com/<you>/claude-multiengine-router.git
 cd claude-multiengine-router
 bash install.sh
+```
+
+Windows PowerShell:
+
+```powershell
+git clone https://github.com/<you>/claude-multiengine-router.git
+cd claude-multiengine-router
+.\install.ps1
+```
+
+If PowerShell blocks local scripts, allow locally created scripts for the current user, then retry:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+.\install.ps1
+```
+
+If you do not want to change execution policy, run the Python installer directly:
+
+```powershell
+python .\install.py
 ```
 
 Optional configuration:
@@ -85,6 +117,14 @@ Configurable values:
 - `GROK_MODEL`: default `grok-build`
 
 Advanced env overrides are supported for unusual install paths: `CLAUDE_BIN`, `CODEX_BIN`, `GROK_BIN`, and `PYTHON_BIN`.
+
+Windows PowerShell env override example:
+
+```powershell
+$env:OUTPUT_DIR = "$env:USERPROFILE\.agent-router\output"
+$env:GROK_MODEL = "grok-build"
+.\install.ps1
+```
 
 ## Usage
 
@@ -120,6 +160,12 @@ Installed MCP servers:
 bash uninstall.sh
 ```
 
+Windows:
+
+```powershell
+.\uninstall.ps1
+```
+
 The uninstaller backs up same-name installed files under:
 
 ```text
@@ -131,16 +177,24 @@ It also removes the user-scoped `codex` and `grok` MCP registrations when the `c
 ## Development Checks
 
 ```bash
-bash -n install.sh uninstall.sh tests/test_install_temp_home.sh
+bash -n install.sh uninstall.sh tests/test_install_temp_home.sh tests/test_uninstall_temp_home.sh
 bash tests/test_install_temp_home.sh
+bash tests/test_uninstall_temp_home.sh
+python3 tests/test_python_installer.py
 python3 -m unittest discover -s mcp-servers/grok-mcp -p 'test_*.py'
+```
+
+When PowerShell is available, also run:
+
+```powershell
+pwsh -NoProfile -Command "[scriptblock]::Create((Get-Content -Raw .\install.ps1)) | Out-Null; [scriptblock]::Create((Get-Content -Raw .\uninstall.ps1)) | Out-Null"
 ```
 
 The temp-HOME smoke test uses fake `claude`, `codex`, and `grok` binaries. It does not touch your real `~/.claude`.
 
 ## 中文说明
 
-这个项目是一个 macOS/Linux Phase 1 MVP：让 Claude Code 做总控，把 Codex 和官方 Grok Build 桥接成 Claude 可调度的 MCP 工具与 proxy 子代理。
+这个项目是一个支持 macOS、Linux、Windows 的本地多引擎路由器：让 Claude Code 做总控，把 Codex 和官方 Grok Build 桥接成 Claude 可调度的 MCP 工具与 proxy 子代理。
 
 核心分工：
 
@@ -159,14 +213,42 @@ grok login
 
 安装：
 
+macOS/Linux：
+
 ```bash
 bash install.sh
 ```
 
+Windows PowerShell：
+
+```powershell
+.\install.ps1
+```
+
+如果 PowerShell 阻止本地脚本，先执行：
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
+也可以直接运行 Python 安装器：
+
+```powershell
+python .\install.py
+```
+
 卸载：
+
+macOS/Linux：
 
 ```bash
 bash uninstall.sh
+```
+
+Windows：
+
+```powershell
+.\uninstall.ps1
 ```
 
 可选配置见 `config.example.sh`。默认输出目录是 `~/.agent-router/output`，wiki 落档提醒默认关闭。

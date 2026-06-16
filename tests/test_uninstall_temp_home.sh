@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Input: repository uninstall script plus a fake installed tree. Output: backup/removal assertions.
-# Pos: non-destructive smoke test for Phase 1 uninstall behavior.
+# Pos: non-destructive smoke test for wrapper uninstall behavior.
 
 set -euo pipefail
 

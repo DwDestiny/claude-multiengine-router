@@ -13,7 +13,7 @@ This package exposes official Grok Build as stdio MCP tools for Claude Code.
 
 ## Rules
 
-- `GROK_BIN` must win over `which grok`.
+- `GROK_BIN` must win over PATH lookup; Windows PATH fallback should work through `where.exe grok`.
 - `GROK_MODEL` defaults to `grok-build`.
 - Preserve clear login/install errors; do not attempt user login.
 - Do not add direct references to private local paths.

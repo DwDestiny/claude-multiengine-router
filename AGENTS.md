@@ -6,8 +6,10 @@
 
 ## Structure
 
-- `install.sh`: idempotent macOS/Linux installer. It detects CLIs, checks auth, backs up existing same-name files, renders templates, installs the Grok MCP venv, and registers MCP servers.
-- `uninstall.sh`: conservative backup-then-remove uninstaller.
+- `install.py`: idempotent cross-platform installer. It detects CLIs, checks auth, backs up existing same-name files, renders templates, installs the Grok MCP venv, and registers MCP servers.
+- `uninstall.py`: cross-platform backup-then-remove uninstaller.
+- `install.sh` / `uninstall.sh`: Unix thin wrappers around the Python entrypoints.
+- `install.ps1` / `uninstall.ps1`: Windows PowerShell thin wrappers around the Python entrypoints.
 - `config.example.sh`: optional install-time configuration.
 - `skills/agent-router/`: Claude skill template.
 - `agents/`: Claude proxy agent templates.
@@ -18,15 +20,17 @@
 ## Commands
 
 ```bash
-bash -n install.sh uninstall.sh tests/test_install_temp_home.sh
+bash -n install.sh uninstall.sh tests/test_install_temp_home.sh tests/test_uninstall_temp_home.sh
 bash tests/test_install_temp_home.sh
+bash tests/test_uninstall_temp_home.sh
+python3 tests/test_python_installer.py
 python3 -m unittest discover -s mcp-servers/grok-mcp -p 'test_*.py'
 ```
 
 ## Safety Rules
 
 - Never modify the user's source `~/.claude` files while developing this repository.
-- Installer tests must use a temporary `HOME` or explicit skip flags.
+- Installer tests must use a temporary `HOME` / `USERPROFILE` or explicit skip flags.
 - Keep generated/user-local files out of git: `config.local.sh`, `.venv`, backups, caches.
 - Preserve the explicit `danger-full-access` warning in README and agent docs.
 

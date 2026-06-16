@@ -6,6 +6,7 @@ Pos: low-level guardrail tests for Grok CLI parsing, discovery, and commands.
 from __future__ import annotations
 
 import os
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -65,11 +66,34 @@ class GrokServerHelpersTest(unittest.TestCase):
             with mock.patch.dict(os.environ, {"GROK_BIN": str(grok)}, clear=False):
                 self.assertEqual(server.resolve_grok_bin(), str(grok))
 
+    def test_resolve_grok_bin_accepts_existing_windows_env_cmd(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            grok = Path(tmp) / "grok.cmd"
+            grok.write_text("@echo off\n", encoding="utf-8")
+
+            with mock.patch.dict(os.environ, {"GROK_BIN": str(grok)}, clear=False), mock.patch(
+                "platform.system", return_value="Windows"
+            ):
+                self.assertEqual(server.resolve_grok_bin(), str(grok))
+
     def test_resolve_grok_bin_falls_back_to_path(self) -> None:
         with mock.patch.dict(os.environ, {"GROK_BIN": ""}, clear=False), mock.patch(
             "shutil.which", return_value="/usr/local/bin/grok"
         ):
             self.assertEqual(server.resolve_grok_bin(), "/usr/local/bin/grok")
+
+    def test_resolve_grok_bin_windows_falls_back_to_where_exe(self) -> None:
+        completed = subprocess.CompletedProcess(
+            ["where.exe", "grok"],
+            0,
+            stdout="C:\\Tools\\grok.cmd\r\n",
+            stderr="",
+        )
+
+        with mock.patch.dict(os.environ, {"GROK_BIN": ""}, clear=False), mock.patch(
+            "shutil.which", return_value=None
+        ), mock.patch("platform.system", return_value="Windows"), mock.patch("subprocess.run", return_value=completed):
+            self.assertEqual(server.resolve_grok_bin(), "C:\\Tools\\grok.cmd")
 
     def test_resolve_grok_bin_errors_clearly(self) -> None:
         with mock.patch.dict(os.environ, {"GROK_BIN": ""}, clear=False), mock.patch("shutil.which", return_value=None):

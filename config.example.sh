@@ -1,5 +1,5 @@
-# Input: optional user edits before install. Output: config values consumed by install.sh.
-# Pos: copy to config.local.sh or export these variables before running install.sh.
+# Input: optional user edits before install. Output: config values consumed by install.py.
+# Pos: copy to config.local.sh or export these variables before running install.sh/install.ps1/install.py.
 
 # Where generated images and other durable agent artifacts should go.
 export OUTPUT_DIR="${OUTPUT_DIR:-$HOME/.agent-router/output}"

@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import os
+import platform
 import shutil
 import subprocess
 import tempfile
@@ -48,7 +49,7 @@ def resolve_grok_bin() -> str:
     env_bin = os.environ.get("GROK_BIN", "").strip()
     if env_bin:
         candidate = Path(env_bin).expanduser()
-        if candidate.exists() and os.access(candidate, os.X_OK):
+        if candidate.exists() and (platform.system() == "Windows" or os.access(candidate, os.X_OK)):
             return str(candidate)
         raise FileNotFoundError(
             f"GROK_BIN points to a missing or non-executable file: {candidate}. "
@@ -58,6 +59,22 @@ def resolve_grok_bin() -> str:
     path_bin = shutil.which("grok")
     if path_bin:
         return path_bin
+
+    if platform.system() == "Windows":
+        try:
+            completed = subprocess.run(
+                ["where.exe", "grok"],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+        except OSError:
+            completed = None
+        if completed and completed.returncode == 0:
+            for line in completed.stdout.splitlines():
+                candidate = line.strip()
+                if candidate:
+                    return candidate
 
     raise FileNotFoundError(
         "Grok Build CLI was not found. Install it from https://x.ai/cli, "

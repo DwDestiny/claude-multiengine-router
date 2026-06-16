@@ -2,7 +2,7 @@
 
 ## Boundary
 
-This folder contains Claude proxy agent templates. `install.sh` renders placeholders such as `__CODEX_BIN__`, `__GROK_BIN__`, `__OUTPUT_DIR__`, and model values into the user's `~/.claude/agents/` directory.
+This folder contains Claude proxy agent templates. `install.py` renders placeholders such as `__CODEX_BIN__`, `__GROK_BIN__`, `__OUTPUT_DIR__`, and model values into the user's `~/.claude/agents/` directory.
 
 ## Rules
 

@@ -2,15 +2,21 @@
 
 ## Phase 2: Windows
 
-- Add native PowerShell installer and uninstaller.
-- Validate Claude Code, Codex CLI, Grok Build, and Python path detection on Windows.
-- Decide whether native Windows should support the same `~/.claude` layout or prefer WSL-first docs.
-- Add Windows-safe backup paths and timestamp formatting.
-- Add GitHub Actions Windows smoke tests with fake CLIs.
+Implemented in `docs/phase-2-windows.md`:
+
+- Chose the cross-platform Python installer architecture.
+- Added PowerShell thin wrappers for native Windows entrypoints.
+- Kept the same user-scoped `.claude` layout on Windows, rooted at `%USERPROFILE%`.
+- Added Windows-safe backup names and timestamp formatting.
+- Added local fake-CLI tests for portable installer behavior.
+
+Remaining Windows work is now Phase 3 CI / true-machine verification.
 
 ## Phase 3: CI and Release
 
 - Add CI for `bash -n`, shell smoke tests, and Python unit tests.
+- Add GitHub Actions Windows smoke tests with fake `.cmd` CLIs.
+- Add PowerShell syntax checks once `pwsh` is available in CI.
 - Add shell linting once script behavior stabilizes.
 - Add release packaging checks for missing placeholders and private path leaks.
 - Add integration-test documentation for real `claude mcp add` runs on a disposable Claude profile.

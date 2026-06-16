@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Input: repository install script plus fake local CLIs. Output: temp-HOME install assertions.
-# Pos: non-destructive smoke test for Phase 1 install rendering and copying.
+# Pos: non-destructive smoke test for wrapper install rendering and copying.
 
 set -euo pipefail
 
@@ -11,6 +11,8 @@ trap 'rm -rf "$TMP_ROOT"' EXIT
 FAKE_BIN="$TMP_ROOT/bin"
 TEST_HOME="$TMP_ROOT/home"
 mkdir -p "$FAKE_BIN" "$TEST_HOME"
+FAKE_BIN_REAL="$(cd "$FAKE_BIN" && pwd)"
+TEST_HOME_REAL="$(cd "$TEST_HOME" && pwd)"
 
 cat >"$FAKE_BIN/claude" <<'FAKE'
 #!/usr/bin/env bash
@@ -119,9 +121,9 @@ test -f "$TEST_HOME/.claude/agents/grok-coder.md"
 test -f "$TEST_HOME/.claude/mcp-servers/grok-mcp/server.py"
 test -f "$TEST_HOME/.claude/agent-router/config.sh"
 
-grep -q "$FAKE_BIN/codex" "$TEST_HOME/.claude/agents/codex-exec.md"
-grep -q "$FAKE_BIN/grok" "$TEST_HOME/.claude/agents/grok-coder.md"
-grep -q "$TEST_HOME/router-output/images" "$TEST_HOME/.claude/agents/codex-image.md"
+grep -q "$FAKE_BIN_REAL/codex" "$TEST_HOME/.claude/agents/codex-exec.md"
+grep -q "$FAKE_BIN_REAL/grok" "$TEST_HOME/.claude/agents/grok-coder.md"
+grep -q "$TEST_HOME_REAL/router-output/images" "$TEST_HOME/.claude/agents/codex-image.md"
 grep -q "ENABLE_WIKI_LOG=false" "$TEST_HOME/.claude/agent-router/config.sh"
 
 if rg -n "/Users/dw|Desktop/claude|老党|~/wiki|~/.claude/CLAUDE.md" "$TEST_HOME/.claude/skills/agent-router" "$TEST_HOME/.claude/agents" "$TEST_HOME/.claude/mcp-servers/grok-mcp"; then
