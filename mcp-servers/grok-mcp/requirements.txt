@@ -1,0 +1,4 @@
+# Input: Python package resolver. Output: dependencies for the Grok MCP server.
+# Pos: runtime dependency list installed by install.sh inside ~/.claude/mcp-servers/grok-mcp/.venv.
+
+mcp>=1.0.0

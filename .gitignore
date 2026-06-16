@@ -1,0 +1,13 @@
+# Input: local development/runtime artifacts. Output: ignored files for git.
+# Pos: keep user config, virtualenvs, caches, and local backups out of the open-source repo.
+
+config.local.sh
+.DS_Store
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+*.bak.*
+tmp/
+dist/
+build/
