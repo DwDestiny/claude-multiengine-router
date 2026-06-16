@@ -15,6 +15,12 @@ from unittest import mock
 import server
 
 
+def native_path(posix_style_path: str) -> str:
+    if os.name == "nt":
+        return str(Path(posix_style_path))
+    return posix_style_path
+
+
 class GrokServerHelpersTest(unittest.TestCase):
     def test_parse_success_schema_returns_data(self) -> None:
         payload = server.parse_grok_stdout(
@@ -101,15 +107,18 @@ class GrokServerHelpersTest(unittest.TestCase):
                 server.resolve_grok_bin()
 
     def test_code_command_uses_resolved_grok_and_configured_model(self) -> None:
-        with mock.patch.dict(os.environ, {"GROK_BIN": "/tmp/grok", "GROK_MODEL": "grok-test"}, clear=False), mock.patch(
+        grok_bin = native_path("/tmp/grok")
+        cwd = native_path("/tmp/project")
+
+        with mock.patch.dict(os.environ, {"GROK_BIN": grok_bin, "GROK_MODEL": "grok-test"}, clear=False), mock.patch(
             "pathlib.Path.exists", return_value=True
         ), mock.patch("os.access", return_value=True):
-            command = server.build_code_command("/tmp/project", "fix bug", best_of_n=3, check=True)
+            command = server.build_code_command(cwd, "fix bug", best_of_n=3, check=True)
 
-        self.assertEqual(command[0], "/tmp/grok")
+        self.assertEqual(command[0], grok_bin)
         self.assertIn("-p", command)
         self.assertIn("--cwd", command)
-        self.assertIn("/tmp/project", command)
+        self.assertIn(cwd, command)
         self.assertIn("--best-of-n", command)
         self.assertIn("3", command)
         self.assertIn("--check", command)
