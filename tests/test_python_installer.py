@@ -237,7 +237,10 @@ exit /b 2
                 expected_grok_path,
                 (claude_home / "agents/grok-coder.md").read_text(encoding="utf-8"),
             )
-            self.assertIn(str(test_home / "router-output/images"), (claude_home / "agents/codex-image.md").read_text(encoding="utf-8"))
+            self.assertIn(
+                str(test_home / "router-output" / "images"),
+                (claude_home / "agents/codex-image.md").read_text(encoding="utf-8"),
+            )
 
     def test_dry_run_json_does_not_create_claude_home(self) -> None:
         with tempfile.TemporaryDirectory(prefix="cmr-python-dry-run.") as tmp:

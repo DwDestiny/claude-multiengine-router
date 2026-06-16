@@ -131,7 +131,7 @@ python3 "$ROOT/tests/private_leak_gate.py" \
   "$TEST_HOME/.claude/agents" \
   "$TEST_HOME/.claude/mcp-servers/grok-mcp"
 
-if rg -n "__CODEX_BIN__|__GROK_BIN__|__OUTPUT_DIR__|__GROK_MODEL__|__CODEX_MODEL_FLAG__|__CODEX_MODEL_LABEL__" "$TEST_HOME/.claude/skills/agent-router" "$TEST_HOME/.claude/agents"; then
+if rg -n "__CODEX_BIN__|__GROK_BIN__|__OUTPUT_DIR__|__OUTPUT_IMAGE_DIR__|__GROK_MODEL__|__CODEX_MODEL_FLAG__|__CODEX_MODEL_LABEL__" "$TEST_HOME/.claude/skills/agent-router" "$TEST_HOME/.claude/agents"; then
   echo "found unreplaced template placeholders after install" >&2
   exit 1
 fi

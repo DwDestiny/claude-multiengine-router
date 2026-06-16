@@ -351,10 +351,12 @@ class Installer:
     def render_template(self, src: Path, dest: Path) -> None:
         code_model_flag = f'-m "{self.config.codex_model}"' if self.config.codex_model else ""
         code_model_label = self.config.codex_model or "Codex config default"
+        output_image_dir = self.config.output_dir / "images"
         replacements = {
             "__CODEX_BIN__": str(self.config.codex_bin),
             "__GROK_BIN__": str(self.config.grok_bin),
             "__OUTPUT_DIR__": str(self.config.output_dir),
+            "__OUTPUT_IMAGE_DIR__": str(output_image_dir),
             "__ENABLE_WIKI_LOG__": self.config.enable_wiki_log,
             "__CODEX_MODEL__": self.config.codex_model,
             "__CODEX_MODEL_FLAG__": code_model_flag,
