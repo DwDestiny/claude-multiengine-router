@@ -52,6 +52,12 @@ def write_fake_cli(fake_bin: Path, name: str, unix_body: str, windows_body: str)
     return path
 
 
+def expected_native_path(posix_style_path: str) -> str:
+    if os.name == "nt":
+        return str(Path(posix_style_path))
+    return posix_style_path
+
+
 class PythonInstallerUnitTest(unittest.TestCase):
     def test_windows_home_prefers_userprofile_over_home(self) -> None:
         home = install.home_from_env({"USERPROFILE": r"C:\Users\Ada", "HOME": "/wrong"}, "Windows")
@@ -67,11 +73,14 @@ class PythonInstallerUnitTest(unittest.TestCase):
 
     def test_mcp_add_commands_are_unquoted_argument_lists(self) -> None:
         mcp_target = Path("C:/Users/Ada/.claude/mcp-servers/grok-mcp")
+        claude_bin = Path("C:/Tools/claude.exe")
+        codex_bin = Path("C:/Tools/codex.exe")
+        grok_bin = Path("C:/Tools/grok.exe")
 
         commands = install.build_mcp_add_commands(
-            claude_bin=Path("C:/Tools/claude.exe"),
-            codex_bin=Path("C:/Tools/codex.exe"),
-            grok_bin=Path("C:/Tools/grok.exe"),
+            claude_bin=claude_bin,
+            codex_bin=codex_bin,
+            grok_bin=grok_bin,
             grok_model="grok-build",
             mcp_target=mcp_target,
             platform_name="Windows",
@@ -79,11 +88,24 @@ class PythonInstallerUnitTest(unittest.TestCase):
 
         self.assertEqual(
             commands["codex"],
-            ["C:/Tools/claude.exe", "mcp", "add", "-s", "user", "codex", "--", "C:/Tools/codex.exe", "mcp-server"],
+            [
+                expected_native_path("C:/Tools/claude.exe"),
+                "mcp",
+                "add",
+                "-s",
+                "user",
+                "codex",
+                "--",
+                expected_native_path("C:/Tools/codex.exe"),
+                "mcp-server",
+            ],
         )
         grok_command = commands["grok"]
-        self.assertEqual(grok_command[:6], ["C:/Tools/claude.exe", "mcp", "add", "-s", "user", "grok"])
-        self.assertIn("GROK_BIN=C:/Tools/grok.exe", grok_command)
+        self.assertEqual(
+            grok_command[:6],
+            [expected_native_path("C:/Tools/claude.exe"), "mcp", "add", "-s", "user", "grok"],
+        )
+        self.assertIn(f"GROK_BIN={expected_native_path('C:/Tools/grok.exe')}", grok_command)
         self.assertIn("GROK_MODEL=grok-build", grok_command)
         self.assertEqual(Path(grok_command[-2]).parts[-3:], (".venv", "Scripts", "python.exe"))
         self.assertEqual(Path(grok_command[-1]).name, "server.py")
@@ -198,6 +220,8 @@ exit /b 2
                 env["PATHEXT"] = f".COM;.EXE;.BAT;.CMD;{env.get('PATHEXT', '')}"
 
             subprocess.run([sys.executable, str(ROOT / "install.py")], cwd=ROOT, env=env, check=True)
+            expected_codex_path = shutil.which("codex", path=env["PATH"]) or str(codex_path)
+            expected_grok_path = shutil.which("grok", path=env["PATH"]) or str(grok_path)
 
             claude_home = test_home / ".claude"
             self.assertTrue((claude_home / "skills/agent-router/SKILL.md").is_file())
@@ -205,8 +229,14 @@ exit /b 2
             self.assertTrue((claude_home / "mcp-servers/grok-mcp/server.py").is_file())
             self.assertTrue((claude_home / "agent-router/config.sh").is_file())
             self.assertTrue((claude_home / "agent-router/config.ps1").is_file())
-            self.assertIn(str(codex_path), (claude_home / "agents/codex-exec.md").read_text(encoding="utf-8"))
-            self.assertIn(str(grok_path), (claude_home / "agents/grok-coder.md").read_text(encoding="utf-8"))
+            self.assertIn(
+                expected_codex_path,
+                (claude_home / "agents/codex-exec.md").read_text(encoding="utf-8"),
+            )
+            self.assertIn(
+                expected_grok_path,
+                (claude_home / "agents/grok-coder.md").read_text(encoding="utf-8"),
+            )
             self.assertIn(str(test_home / "router-output/images"), (claude_home / "agents/codex-image.md").read_text(encoding="utf-8"))
 
     def test_dry_run_json_does_not_create_claude_home(self) -> None:
