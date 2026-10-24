@@ -1,12 +1,17 @@
-name: Mac mini runner validation
+name: Mac mini headless runner validation
 on:
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   validate:
-    runs-on: [self-hosted, macOS, ARM64, macmini]
+    runs-on: [self-hosted, macOS, ARM64, macmini, headless, offscreen-render]
     timeout-minutes: 8
     steps:
-      - name: Verify isolated CI environment and GUI availability
+      - name: Verify real job identity, isolation, ambient tools and offscreen basics
         run: /usr/local/bin/python3.12 -I "/Library/Application Support/DwMacCI/ci-acceptance.py"
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - name: Verify preprovisioned Python is selected without sudo
+        run: python --version
